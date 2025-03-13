@@ -29,6 +29,7 @@ def fetch_stock_data(ticker):
             raise Exception("No data available for the given ticker.")
         else:
             data.columns = data.columns.droplevel(0)
+            data.index = data.index.date
             data.columns = ["Open", "High", "Low", "Close", "Volume"]
             return data
     except Exception as e:

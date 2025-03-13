@@ -6,6 +6,8 @@ import plotly.graph_objects as go
 import pandas as pd
 from utils.fetch_data import fetch_stock_data  # Import only stock data function for now
 
+df = pd.read_csv("data/tickers.csv")
+combined_tickers = df["Combined"].tolist() if "Combined" in df.columns else df["Ticker"].tolist()
 
 date_ranges = {
     "1D": 1, "1W": 7, "1M": 30, "YTD": "YTD", "1Y": 365, "5Y": 1825, "MAX": "MAX"
@@ -16,13 +18,18 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 # Layout
 app.layout = dbc.Container([
-    html.H1("Stock Candlestick Chart", className="text-center my-3"),
+    html.H1("Stock Screener", className="text-center my-3"),
     
     # Input field for stock ticker
     dbc.Row([
-        dbc.Col(dcc.Input(id="ticker-input", type="text", placeholder="Enter Ticker", className="form-control")),
-        dbc.Col(dbc.Button("Submit", id="submit-button", color="primary", className="btn-block"))
-    ], className="mb-3"),
+        dbc.Col(dcc.Dropdown(
+            id='ticker-input',
+            options=[{'label': i, 'value': i.split(" - ")[0]} for i in combined_tickers],  # Extract ticker from combined format
+            placeholder='Enter or select a ticker...',
+        ), width=9),  # Adjust width for spacing
+        
+        dbc.Col(dbc.Button("Submit", id="submit-button", color="primary", className="btn-block"), width=3)  # Button next to dropdown
+    ], className="mb-3 align-items-center"),  # Align items vertically
     
     # Date range selection buttons (disabled initially)
     dbc.Row([
@@ -78,7 +85,8 @@ def update_chart(n_clicks, *args):
     if selected_range == "MAX":
         filtered_data = data
     elif selected_range == "YTD":
-        filtered_data = data[data.index >= f"{today.year}-01-01"]
+        start_of_year = datetime.date(today.year, 1, 1)
+        filtered_data = data[data.index >= start_of_year]
     else:
         days = date_ranges[selected_range]
         filtered_data = data[data.index >= today - datetime.timedelta(days=days)]
@@ -100,7 +108,15 @@ def update_chart(n_clicks, *args):
     )
 
     # Enable date range buttons
-    enabled_buttons = [dbc.Button(label, id=f"btn-{label}", color="primary", disabled=False) for label in date_ranges.keys()]
+    enabled_buttons = [
+    dbc.Button(
+        label, 
+        id=f"btn-{label}", 
+        color="success" if f"btn-{label}" == triggered_id else "primary",  # Highlight active button
+        disabled=False
+    ) 
+    for label in date_ranges.keys()
+    ]
 
     return fig, enabled_buttons
 
