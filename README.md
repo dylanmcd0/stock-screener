@@ -1,15 +1,16 @@
-# Fundamental Long/Short Equity Strategy with Data-Driven Insights
+# Stock Screener
 
 ## **Overview**
-This project implements a fundamental long/short equity strategy for the Technology, Media, & Telecommunications (TMT) sector. The strategy ranks stocks based on key **fundamental factors**, **valuation metrics**, and **earnings sentiment analysis**, constructing a sector-neutral portfolio that is backtested against a benchmark.
-
-By integrating data-driven insights with traditional fundamental investing, this project demonstrates a structured approach to hedge fund-style equity selection.
+This project is designed to be a tool for initial stock screening for an analyst just beginning his or her research into a specific company.
+It offers very surface-level analysis of company information, moreso designed for me to work on my Plotly Dash skills, as well as practice
+some basic financial modeling and anlaysis. 
 
 ---
 ## **In Progress**
-
 **Current Tasks:**
-- Gathering and cleaning data
+- Caching data to prevent repetiive API requests
+- Adding company metrics
+- Incorporating company news articles
 
 ---
 ## **1. Investment Thesis**
@@ -72,41 +73,48 @@ The strategy is backtested using **historical stock prices and fundamental data*
 ---
 ## **6. Repository Structure**
 ```
-/stock-screener
-│── app.py                     # Main entry point for the Dash app
-│── requirements.txt            # Dependencies (e.g., dash, yfinance, plotly)
-│── README.md                   # Project documentation
-│── .gitignore                   # Ignore unnecessary files (e.g., __pycache__)
+📂 /stock-screener
+│── 📜 **app.py**                     → Main entry point for the Dash app   
+│── 📦 **requirements.txt**            → Dependencies (e.g., dash, yfinance, plotly)  
+│── 📖 **README.md**                   → Project documentation
+│── 🚫 **.gitignore**                  → Ignore unnecessary files (e.g., __pycache__)  
 │
-├── assets/                     # Static files (CSS, JS, images)
-│   ├── styles.css              # Custom styles for the dashboard (optional)
+├── 🎨 **assets/**                     → Static files (CSS, JS, images)
+│   ├── 🎨 **styles.css**              → Custom styles for the dashboard
 │
-├── components/                 # Reusable UI components
-│   ├── layout.py               # Layout definition (separate UI from logic)
-│   ├── callbacks.py            # Dash callbacks for interactivity
+├── 📦 **components/**                 → Reusable UI components
+│   ├── 🏗️ **layout.py**               → Layout definition (separate UI from logic)  
+│   ├── 🔄 **callbacks.py**            → Dash callbacks for interactivity
 │
-├── data/                       # Any local data files (optional, if needed)
+├── 📊 **data/**                       → Any local data files (optional, if needed) 
 │
-└── utils/                      # Helper functions (e.g., API requests)
-    ├── fetch_data.py           # API functions for stock data, news, etc.
-    ├── calculations.py         # Any financial calculations (DCF, ratios)
+└── 🔍 **utils/**                      → Helper functions (e.g., API requests)
+    ├── 📡 **fetch_data.py**           → API functions for stock data, news, etc.
+    ├── 🧮 **calculations.py**         → Any financial calculations (DCF, ratios)
+
 ```
 
 ---
-## **7. How to Run This Project**
+## **7. How to Run Locally**
 ### **Installation**
+I want to productionize this, but might not get to. 
+If you want to use this just follow along.
 ```bash
 # Clone the repository
-git clone https://github.com/yourgithub/long-short-equity-tmt.git
-cd long-short-equity-tmt
+git clone https://github.com/dylanmcd0/stock-screener.git
+cd stock-screener
 
-# Install dependencies
-pip install -r requirements.txt
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate
+
+# Install dependencies (I use uv, it's much faster)
+uv pip install -r requirements.txt
 ```
 
-### **Run Data Processing & Backtest**
+### **Run App**
 ```bash
-python main.py
+python -m app.py
 ```
 
 ---
@@ -115,13 +123,6 @@ python main.py
 🔹 **Expand Universe:** Apply to **other sectors** or **global markets**  
 🔹 **Alternative Data Signals:** Incorporate **Google Trends, web traffic, credit card data**  
 🔹 **Leverage Machine Learning:** Predict earnings surprises based on fundamental patterns  
-
----
-## **9. Conclusion**
-This project showcases a basic fundamental long/short equity strategy that combines:
-✅ **Traditional valuation and fundamental analysis**
-✅ **Earnings call sentiment analysis & alternative data**
-✅ **Systematic portfolio construction & backtesting**
 
 ---
 ## **Author & Contact**
