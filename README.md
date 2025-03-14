@@ -1,104 +1,54 @@
 # Stock Screener
 
 ## **Overview**
-This project is designed to be a tool for initial stock screening for an analyst just beginning his or her research into a specific company.
-It offers very surface-level analysis of company information, moreso designed for me to work on my Plotly Dash skills, as well as practice
-some basic financial modeling and anlaysis. 
+A lightweight, interactive stock screener built with Dash and Plotly that allows users to visualize stock price data and related news. 
+
+This application provides essential tools for analyzing stocks through candlestick charts with customizable time ranges and relevant news articles.
+
+I will be adding more things in the future
 
 ---
-## **In Progress**
-**Current Tasks:**
-- Caching data to prevent repetiive API requests
-- Adding company metrics
-- Incorporating company news articles
+## **Features**
+- **Interactive Stock Search**: Search for any stock using ticker symbols from the S&P 500
+- **Candlestick Charts**: Visualize price movements with adjustable time ranges (1D, 1W, 1M, YTD, 1Y, 5Y, MAX)
+- **Latest News**: Display recent news articles related to the selected company
+- **Responsive Design**: Built with Bootstrap components for a clean, mobile-friendly interface
 
 ---
-## **1. Investment Thesis**
-Equity long/short strategies rely on identifying **high-quality, undervalued stocks** for long positions and **low-quality, overvalued stocks** for short positions.
+## **Data Sources & APIs**
+This project leverages the following data sources:
 
-This model incorporates fundamental analysis alongside machine learning-driven sentiment analysis to enhance decision-making:
-
-- **Longs:** Companies with **strong revenue growth, profitability, and favorable sentiment**.
-- **Shorts:** Companies with **declining earnings, high debt, and negative sentiment**.
-
-**Sector Focus:** The **TMT sector** is ideal due to:
-- **High dispersion** in fundamentals (growth vs. declining companies)
-- **Frequent earnings surprises** affecting stock prices
-- **Hedge fund interest** in relative valuation plays
+| **Data Type**      | **Source/API**           |
+|--------------------|--------------------------|
+| Stock Price Data   | Yahoo Finance API        |
+| Company News       | News API                 |
+| Company Listings   | Wikipedia (S&P 500 list) |
 
 ---
-## **2. Data Sources & APIs**
-This project collects **fundamental, price, and sentiment data** using:
-
-| **Data Type**          | **Source/API**                 |
-|------------------------|--------------------------------|
-| Earnings Transcripts  | Webscrapping |
-| Stock Prices          | Yahoo Finance, Quandl          |
-| Sentiment Analysis    | FinBERT, OpenAI API (ChatGPT)  |
-
----
-## **3. Stock Ranking Model**
-Each stock is ranked based on a **multi-factor scoring system**:
-
-| **Factor**             | **Metric**                     | **Weight (%)** |
-|------------------------|--------------------------------|---------------|
-| **Growth**             | 5Y Revenue CAGR, EPS CAGR     | 20%           |
-| **Profitability**      | ROIC, Gross Margins, FCF Yield | 20%           |
-| **Valuation**          | P/E, P/B, EV/EBITDA vs. Sector | 20%           |
-| **Financial Health**   | Debt/Equity, Interest Coverage | 20%           |
-| **Sentiment Analysis** | Earnings Call Sentiment, Insider Buying | 20% |
-
-📌 **Top 10% of stocks = Longs**  
-📌 **Bottom 10% of stocks = Shorts**  
-
----
-## **4. Portfolio Construction & Risk Management**
-- **Sector-Neutral:** Equal exposure to long & short positions within TMT
-- **Position Sizing:** Equal-weighted or volatility-adjusted allocations
-- **Risk Controls:** Stop-loss, max drawdown limits, and liquidity screening
-- **Rebalancing:** Monthly or quarterly portfolio updates
-
----
-## **5. Backtesting Methodology**
-The strategy is backtested using **historical stock prices and fundamental data**:
-
-- **Backtesting Framework:** Backtrader, QuantConnect
-- **Benchmark:** S&P 500 (SPY) or TMT sector ETF (XLK)
-- **Performance Metrics:**
-  ✅ **Annualized Return & Alpha**  
-  ✅ **Sharpe Ratio** (Risk-adjusted performance)  
-  ✅ **Max Drawdown** (Risk exposure)  
-  ✅ **Factor Contribution Analysis**  
-
----
-## **6. Repository Structure**
+## **Repository Structure**
 ```
 📂 /stock-screener
-│── 📜 **app.py**                     → Main entry point for the Dash app   
-│── 📦 **requirements.txt**            → Dependencies (e.g., dash, yfinance, plotly)  
-│── 📖 **README.md**                   → Project documentation
-│── 🚫 **.gitignore**                  → Ignore unnecessary files (e.g., __pycache__)  
+│── 📜 app.py                   → Main Dash application
+│── 📦 requirements.txt         → Python dependencies
+│── 📖 README.md                → Project documentation
+│── 📄 .env                     → API keys (not committed to Git)
 │
-├── 🎨 **assets/**                     → Static files (CSS, JS, images)
-│   ├── 🎨 **styles.css**              → Custom styles for the dashboard
+├── 📊 data/
+│   └── 📈 tickers.csv          → List of available stock tickers
 │
-├── 📦 **components/**                 → Reusable UI components
-│   ├── 🏗️ **layout.py**               → Layout definition (separate UI from logic)  
-│   ├── 🔄 **callbacks.py**            → Dash callbacks for interactivity
+├── 📓 fetch_tickers.ipynb      → Notebook for fetching ticker data
 │
-├── 📊 **data/**                       → Any local data files (optional, if needed) 
-│
-└── 🔍 **utils/**                      → Helper functions (e.g., API requests)
-    ├── 📡 **fetch_data.py**           → API functions for stock data, news, etc.
-    ├── 🧮 **calculations.py**         → Any financial calculations (DCF, ratios)
-
+└── 🔍 utils/
+    └── 📡 fetch_data.py        → Functions for data retrieval
 ```
 
 ---
-## **7. How to Run Locally**
+## **Setup & Installation**
+### **Prerequisites**
+- Python 3.8+
+- pip or uv package installer
+
 ### **Installation**
-I want to productionize this, but might not get to. 
-If you want to use this just follow along.
 ```bash
 # Clone the repository
 git clone https://github.com/dylanmcd0/stock-screener.git
@@ -106,30 +56,53 @@ cd stock-screener
 
 # Create virtual environment
 python -m venv venv
+
+# Activate virtual environment
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
 source venv/bin/activate
 
-# Install dependencies (I use uv, it's much faster)
+# Install dependencies
+# Using pip:
+pip install -r requirements.txt
+# Or using uv (faster):
 uv pip install -r requirements.txt
 ```
 
-### **Run App**
-```bash
-python -m app.py
+### **API Keys**
+Create a `.env` file in the root directory and add your News API key:
+```
+NEWS_API_KEY=your_news_api_key_here
 ```
 
----
-## **8. Future Improvements**
-🔹 **Enhance Sentiment Analysis:** Use deep-learning models (BERT) for better transcript analysis  
-🔹 **Expand Universe:** Apply to **other sectors** or **global markets**  
-🔹 **Alternative Data Signals:** Incorporate **Google Trends, web traffic, credit card data**  
-🔹 **Leverage Machine Learning:** Predict earnings surprises based on fundamental patterns  
+You can obtain a free News API key from [newsapi.org](https://newsapi.org/).
 
 ---
-## **Author & Contact**
+## **Running the Application**
+```bash
+python -m app
+```
+
+Navigate to http://127.0.0.1:8050/ in your web browser to use the application.
+
+---
+## **Current Development**
+- Implementing caching to reduce API requests
+- Adding fundamental financial metrics
+- Improving the news integration with better filtering
+
+---
+## **Future Improvements**
+- Implement portfolio tracking functionality
+- Add financial statements visualization
+- Include options data for selected stocks
+- Basic financial modeling
+- Deployment (hopefully soon)
+
+
+---
+## **Author**
 👤 **Dylan R. McDonald**  
 💼 **Commodities Technology Associate | Aspiring Investment Analyst**  
 📧 **dylmcdona@icloud.com**  
-🔗 **[]**  
-📂 **[]**  
-
----
