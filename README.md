@@ -5,7 +5,9 @@ A lightweight, interactive stock screener built with Dash and Plotly that allows
 
 This application provides essential tools for analyzing stocks through candlestick charts with customizable time ranges and relevant news articles.
 
-I will be adding more things in the future
+![Stock Screener Screenshot](data/images/current_ui.png)
+
+I will be adding more features in the future
 
 ---
 ## **Features**

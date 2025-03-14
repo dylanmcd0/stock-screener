@@ -1,0 +1,200 @@
+/* Modern Finance Theme for Stock Screener */
+
+:root {
+  --primary: #1e88e5;
+  --primary-dark: #1976d2;
+  --primary-light: #bbdefb;
+  --primary-bg: #f8fafc;
+  --secondary: #546e7a;
+  --success: #43a047;
+  --danger: #e53935;
+  --dark: #263238;
+  --light: #eceff1;
+  --text: #37474f;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Global Styles */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background-color: #f9fbfd;
+  line-height: 1.6;
+}
+
+/* Header */
+.app-header {
+  background: #f0f8ff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.app-header h1 {
+  color: var(--primary);
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+/* Chart Container */
+.chart-container {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 5px;
+  background-color: var(--primary-bg);
+  box-shadow: var(--shadow);
+  margin-bottom: 10px;
+}
+
+.chart-container:hover {
+  box-shadow: var(--hover-shadow);
+}
+
+/* Date Range Buttons Container */
+.date-buttons-container {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* Custom Date Buttons */
+.date-btn {
+  background-color: var(--primary-bg);
+  color: var(--secondary);
+  border: 1px solid #cbd5e1;
+  border-radius: 20px;
+  padding: 6px 15px;
+  margin: 0 5px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.date-btn:hover {
+  background-color: #e3f2fd;
+  color: var(--primary);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.date-btn.active {
+  background-color: var(--primary);
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  border: none;
+  transform: scale(1.05);
+}
+
+/* News Section */
+.news-section-title {
+  color: var(--primary);
+  font-weight: 600;
+  border-bottom: 2px solid var(--primary-light);
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.news-card {
+  border: none;
+  border-left: 4px solid var(--primary);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  background-color: white;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.news-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--hover-shadow);
+}
+
+.news-date {
+  font-size: 0.85rem;
+  color: var(--secondary);
+  margin-bottom: 4px;
+}
+
+.news-title {
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 12px;
+  color: var(--dark);
+}
+
+.news-link {
+  background-color: #e3f2fd;
+  color: var(--primary-dark);
+  font-weight: 500;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 5px 15px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.news-link:hover {
+  background-color: var(--primary-light);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+/* Loading Spinner */
+._dash-loading-callback {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+._dash-loading-callback::after {
+  content: '';
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e0e0e0;
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Dropdown and search styling */
+.Select-control {
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+}
+
+.Select-control:hover {
+  border-color: var(--primary);
+  box-shadow: var(--hover-shadow);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  box-shadow: var(--hover-shadow);
+  transform: translateY(-1px);
+}

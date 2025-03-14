@@ -20,13 +20,29 @@ date_ranges = {
     "MAX": "MAX",
 }
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(
+    __name__, 
+    external_stylesheets=[
+        dbc.themes.BOOTSTRAP,
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    ],
+    assets_folder="assets"
+)
+
+# Add direct CSS styling to ensure it's applied
+app._favicon = "assets/favicon.ico"  # Add a favicon reference to ensure assets are loaded
 
 # Layout
-app.layout = dbc.Container(
+app.layout = html.Div([
+    
+    dbc.Container(
     [
-        # Header for the page
-        html.H1("Stock Screener", className="text-center my-3"),
+        # Header for the page with custom styling
+        html.Div([
+            html.H1("Stock Screener", 
+                   className="text-center my-3",
+                   style={"color": "#1e88e5", "fontWeight": "700", "marginBottom": "25px"})
+        ], style={"background": "#f0f8ff", "padding": "20px", "borderRadius": "10px", "marginBottom": "20px"}),
         # Input field for stock ticker and submit button
         dbc.Row(
             [
@@ -59,8 +75,17 @@ app.layout = dbc.Container(
             children=[
                 html.Div(
                     [
-                        # Chart itself
-                        dcc.Graph(id="candlestick-chart"),
+                        # Chart itself with enhanced styling
+                        html.Div(
+                            dcc.Graph(id="candlestick-chart"),
+                            style={
+                                "border": "1px solid #e0e0e0",
+                                "borderRadius": "10px",
+                                "padding": "5px",
+                                "backgroundColor": "#f8fafc",
+                                "boxShadow": "0 4px 8px rgba(0,0,0,0.08)"
+                            }
+                        ),
                         # Date range buttons below the chart
                         html.Div(
                             dbc.ButtonGroup(
@@ -82,17 +107,26 @@ app.layout = dbc.Container(
                             ),
                             style={
                                 "textAlign": "center",
-                                "marginTop": "-20px",
-                            },  # Position closer to chart
+                                "marginTop": "10px",
+                                "marginBottom": "10px",
+                            },  # Positioned below chart with proper spacing
                         ),
                     ]
                 ),
             ],
         ),
-        # News section
+        # News section with enhanced styling
         html.Div(
             [
-                html.H3("Latest News", className="mt-4 mb-3"),
+                html.H3("Latest News", 
+                       className="mt-4 mb-3",
+                       style={
+                           "color": "#1976d2", 
+                           "fontWeight": "600",
+                           "borderBottom": "2px solid #bbdefb",
+                           "paddingBottom": "8px",
+                           "display": "inline-block"
+                       }),
                 dcc.Loading(
                     id="news-loading",
                     type="default",
@@ -105,7 +139,8 @@ app.layout = dbc.Container(
         dcc.Store(id="stored-news-data", data=[]),
     ],
     fluid=True,
-)
+    )
+])
 
 
 # **New Callback**: Fetch stock data only when the ticker is selected
@@ -236,27 +271,47 @@ def update_chart(stored_data, *args):
         xaxis_rangeslider_visible=False,
     )
 
-    # Enable date range buttons with improved styling
+    # Enable date range buttons with very distinctive styling
     enabled_buttons = []
     for label in date_ranges.keys():
-        # Determine button color based on selected range
+        # Determine button color and style based on selected range
         if (f"btn-{label}" == triggered_id) or (
             label == selected_range and triggered_id != f"btn-{label}"
         ):
-            button_color = "info"  # This button is selected - using info color for better contrast
-            outline = False  # Solid button for selected
+                # Selected button - very distinct styling
+            button_style = {
+                "backgroundColor": "#1e88e5", 
+                "color": "white",
+                "fontWeight": "bold",
+                "boxShadow": "0 4px 8px rgba(0,0,0,0.2)",
+                "border": "none",
+                "borderRadius": "20px",
+                "padding": "6px 15px",
+                "transform": "scale(1.05)"
+            }
+            button_color = None  # Use our custom style instead
+            outline = False
         else:
-            button_color = "secondary"  # This button is not selected
-            outline = True  # Outline style for unselected
-
-        # Create button with appropriate styling
+            # Unselected button
+            button_style = {
+                "backgroundColor": "#f1f5f9",
+                "color": "#64748b",
+                "border": "1px solid #cbd5e1",
+                "borderRadius": "20px",
+                "padding": "6px 15px"
+            }
+            button_color = None
+            outline = False
+        
+        # Create button with very distinctive styling
         button = dbc.Button(
             label,
             id=f"btn-{label}",
             color=button_color,
-            size="sm",  # Smaller buttons
-            outline=outline,  # Outlined style for unselected
-            className="mx-1",  # Add spacing between buttons
+            style=button_style,
+            size="sm",
+            outline=outline,
+            className="mx-1 my-2",  # Add spacing between buttons
             disabled=False,
         )
         enabled_buttons.append(button)
@@ -287,10 +342,28 @@ def update_news(news_data):
                             href=article["url"],
                             target="_blank",
                             className="btn btn-outline-primary btn-sm",
+                            style={
+                                "backgroundColor": "#e3f2fd",
+                                "color": "#1976d2",
+                                "fontWeight": "500",
+                                "border": "none",
+                                "borderRadius": "20px",
+                                "boxShadow": "0 2px 4px rgba(0,0,0,0.1)",
+                                "padding": "5px 15px",
+                                "transition": "all 0.2s ease"
+                            }
                         ),
                     ]
                 ),
                 className="mb-3",
+                style={
+                    "border": "none",
+                    "borderLeft": "4px solid #1e88e5",
+                    "borderRadius": "8px",
+                    "boxShadow": "0 4px 8px rgba(0,0,0,0.1)",
+                    "backgroundColor": "white",
+                    "transition": "all 0.3s ease"
+                }
             )
         )
 
