@@ -21,129 +21,139 @@ date_ranges = {
 }
 
 app = dash.Dash(
-    __name__, 
+    __name__,
     external_stylesheets=[
         dbc.themes.BOOTSTRAP,
-        "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
     ],
-    assets_folder="assets"
+    assets_folder="assets",
 )
 
-# Add direct CSS styling to ensure it's applied
 app._favicon = "assets/favicon.ico"  # Add a favicon reference to ensure assets are loaded
 
-# Layout
-app.layout = html.Div([
-    
-    dbc.Container(
+
+app.layout = html.Div(
     [
-        # Header for the page with custom styling
-        html.Div([
-            html.H1("Stock Screener", 
-                   className="text-center my-3",
-                   style={"color": "#1e88e5", "fontWeight": "700", "marginBottom": "25px"})
-        ], style={"background": "#f0f8ff", "padding": "20px", "borderRadius": "10px", "marginBottom": "20px"}),
-        # Input field for stock ticker and submit button
-        dbc.Row(
+        dbc.Container(
             [
-                dbc.Col(
-                    dcc.Dropdown(
-                        id="ticker-input",
-                        options=[
-                            {"label": i, "value": i.split(" - ")[0]} for i in combined_tickers
-                        ],  # Extract ticker from combined format
-                        placeholder="Enter or select a ticker...",
-                    ),
-                    width=9,
-                ),
-                dbc.Col(
-                    dbc.Button(
-                        "Submit",
-                        id="submit-button",
-                        color="primary",
-                        className="btn-block",
-                    ),
-                    width=3,
-                ),
-            ],
-            className="mb-3 align-items-center",
-        ),  # Align items vertically
-        # Chart with integrated date range buttons
-        dcc.Loading(
-            id="loading",
-            type="default",
-            children=[
+                # Header for the page with custom styling
                 html.Div(
                     [
-                        # Chart itself with enhanced styling
-                        html.Div(
-                            dcc.Graph(id="candlestick-chart"),
-                            style={
-                                "border": "1px solid #e0e0e0",
-                                "borderRadius": "10px",
-                                "padding": "5px",
-                                "backgroundColor": "#f8fafc",
-                                "boxShadow": "0 4px 8px rgba(0,0,0,0.08)"
-                            }
-                        ),
-                        # Date range buttons below the chart
-                        html.Div(
-                            dbc.ButtonGroup(
-                                [
-                                    # Date range buttons with new styling
-                                    dbc.Button(
-                                        label,
-                                        id=f"btn-{label}",
-                                        color="secondary",
-                                        disabled=True,
-                                        size="sm",  # Smaller buttons
-                                        outline=True,  # Outlined style
-                                        className="mx-1",  # Add spacing between buttons
-                                    )
-                                    for label in date_ranges.keys()
-                                ],
-                                id="date-buttons",
-                                className="mb-3",
+                        html.H1(
+                            "Stock Screener",
+                            className="text-center my-3",
+                            style={"color": "#1e88e5", "fontWeight": "700", "marginBottom": "25px"},
+                        )
+                    ],
+                    style={
+                        "background": "#f0f8ff",
+                        "padding": "20px",
+                        "borderRadius": "10px",
+                        "marginBottom": "20px",
+                    },
+                ),
+                # Input field for stock ticker and submit button
+                dbc.Row(
+                    [
+                        dbc.Col(
+                            dcc.Dropdown(
+                                id="ticker-input",
+                                options=[
+                                    {"label": i, "value": i.split(" - ")[0]}
+                                    for i in combined_tickers
+                                ],  # Extract ticker from combined format
+                                placeholder="Enter or select a ticker...",
                             ),
+                            width=9,
+                        ),
+                        dbc.Col(
+                            dbc.Button(
+                                "Submit",
+                                id="submit-button",
+                                color="primary",
+                                className="btn-block",
+                            ),
+                            width=3,
+                        ),
+                    ],
+                    className="mb-3 align-items-center",
+                ),
+                dcc.Loading(
+                    id="loading",
+                    type="default",
+                    children=[
+                        html.Div(
+                            [
+                                html.Div(
+                                    dcc.Graph(id="candlestick-chart"),
+                                    style={
+                                        "border": "1px solid #e0e0e0",
+                                        "borderRadius": "10px",
+                                        "padding": "5px",
+                                        "backgroundColor": "#f8fafc",
+                                        "boxShadow": "0 4px 8px rgba(0,0,0,0.08)",
+                                    },
+                                ),
+                                # Date range buttons below the chart
+                                html.Div(
+                                    dbc.ButtonGroup(
+                                        [
+                                            dbc.Button(
+                                                label,
+                                                id=f"btn-{label}",
+                                                color="secondary",
+                                                disabled=True,
+                                                size="sm",  # Smaller buttons
+                                                outline=True,  # Outlined style
+                                                className="mx-1",  # Add spacing between buttons
+                                            )
+                                            for label in date_ranges.keys()
+                                        ],
+                                        id="date-buttons",
+                                        className="mb-3",
+                                    ),
+                                    style={
+                                        "textAlign": "center",
+                                        "marginTop": "10px",
+                                        "marginBottom": "10px",
+                                    },  # Positioned below chart with proper spacing
+                                ),
+                            ]
+                        ),
+                    ],
+                ),
+                # News section
+                html.Div(
+                    [
+                        html.H3(
+                            "Latest News",
+                            className="mt-4 mb-3",
                             style={
-                                "textAlign": "center",
-                                "marginTop": "10px",
-                                "marginBottom": "10px",
-                            },  # Positioned below chart with proper spacing
+                                "color": "#1976d2",
+                                "fontWeight": "600",
+                                "borderBottom": "2px solid #bbdefb",
+                                "paddingBottom": "8px",
+                                "display": "inline-block",
+                            },
+                        ),
+                        dcc.Loading(
+                            id="news-loading",
+                            type="default",
+                            children=[html.Div(id="news-container", className="news-articles")],
                         ),
                     ]
                 ),
+                # Store components for data
+                dcc.Store(id="stored-stock-data", data={}),
+                dcc.Store(id="stored-news-data", data=[]),
             ],
-        ),
-        # News section with enhanced styling
-        html.Div(
-            [
-                html.H3("Latest News", 
-                       className="mt-4 mb-3",
-                       style={
-                           "color": "#1976d2", 
-                           "fontWeight": "600",
-                           "borderBottom": "2px solid #bbdefb",
-                           "paddingBottom": "8px",
-                           "display": "inline-block"
-                       }),
-                dcc.Loading(
-                    id="news-loading",
-                    type="default",
-                    children=[html.Div(id="news-container", className="news-articles")],
-                ),
-            ]
-        ),
-        # Store components for data
-        dcc.Store(id="stored-stock-data", data={}),
-        dcc.Store(id="stored-news-data", data=[]),
-    ],
-    fluid=True,
-    )
-])
+            fluid=True,
+        )
+    ]
+)
 
 
-# **New Callback**: Fetch stock data only when the ticker is selected
+# Fetch stock data only when the ticker is selected
 @app.callback(
     [
         Output("stored-stock-data", "data"),  # Store stock data
@@ -156,35 +166,29 @@ def fetch_and_store_data(n_clicks, ticker):
     if not n_clicks or not ticker:
         return {}, []  # Return empty if no ticker selected
 
-    # Find the company name for news search
+    # Find the company name for news search or use ticker
     company_name = ""
     for combined in combined_tickers:
         if combined.startswith(f"{ticker} - "):
             company_name = combined.split(" - ")[1]
             break
-
-    # Use ticker if company name not found
     if not company_name:
         company_name = ticker
 
-    # Fetch stock data once when the ticker is selected
     data = fetch_stock_data(ticker)
     if data is None or data.empty:
         return {}, []
 
-    # Fetch news data
     news_data = fetch_news(company_name)
     if news_data is None:
         news_data = []
 
-    # Add ticker information to the data
     result_dict = {"ticker": ticker, "data": data.to_dict("records")}
 
-    # Return both stock data and news data
     return result_dict, news_data
 
 
-# **Modified Callback**: Update chart and filter data based on selected date range
+# Update chart and filter data
 @app.callback(
     [
         Output("candlestick-chart", "figure"),
@@ -218,12 +222,8 @@ def update_chart(stored_data, *args):
     ticker = stored_data.get("ticker", "")
     stock_data = stored_data.get("data", [])
 
-    # Convert to DataFrame
     data = pd.DataFrame(stock_data)
-
-    # Determine selected date range (default to YTD)
     selected_range = "YTD"
-    # Check what triggered the callback
     if ctx.triggered:
         triggered_id = ctx.triggered[0]["prop_id"].split(".")[0]
         # Only update selected range if a date button was clicked
@@ -235,23 +235,18 @@ def update_chart(stored_data, *args):
     else:
         triggered_id = None
 
-    # Convert the date column to datetime
     data["date"] = pd.to_datetime(data["date"])
-
-    # Get today's date as a Pandas Timestamp
     today = pd.Timestamp.today()
 
-    # Apply date filtering
     if selected_range == "MAX":
-        filtered_data = data  # No filtering, return all data
+        filtered_data = data
     elif selected_range == "YTD":
-        start_of_year = pd.Timestamp(today.year, 1, 1)  # First day of the year
+        start_of_year = pd.Timestamp(today.year, 1, 1)
         filtered_data = data[data["date"] >= start_of_year]
     else:
         days = date_ranges[selected_range]
         filtered_data = data[data["date"] >= today - pd.Timedelta(days=days)]
 
-    # Create Candlestick chart
     fig = go.Figure(
         data=[
             go.Candlestick(
@@ -271,39 +266,34 @@ def update_chart(stored_data, *args):
         xaxis_rangeslider_visible=False,
     )
 
-    # Enable date range buttons with very distinctive styling
     enabled_buttons = []
     for label in date_ranges.keys():
-        # Determine button color and style based on selected range
         if (f"btn-{label}" == triggered_id) or (
             label == selected_range and triggered_id != f"btn-{label}"
         ):
-                # Selected button - very distinct styling
             button_style = {
-                "backgroundColor": "#1e88e5", 
+                "backgroundColor": "#1e88e5",
                 "color": "white",
                 "fontWeight": "bold",
                 "boxShadow": "0 4px 8px rgba(0,0,0,0.2)",
                 "border": "none",
                 "borderRadius": "20px",
                 "padding": "6px 15px",
-                "transform": "scale(1.05)"
+                "transform": "scale(1.05)",
             }
-            button_color = None  # Use our custom style instead
+            button_color = None
             outline = False
         else:
-            # Unselected button
             button_style = {
                 "backgroundColor": "#f1f5f9",
                 "color": "#64748b",
                 "border": "1px solid #cbd5e1",
                 "borderRadius": "20px",
-                "padding": "6px 15px"
+                "padding": "6px 15px",
             }
             button_color = None
             outline = False
-        
-        # Create button with very distinctive styling
+
         button = dbc.Button(
             label,
             id=f"btn-{label}",
@@ -319,13 +309,12 @@ def update_chart(stored_data, *args):
     return fig, enabled_buttons
 
 
-# **New Callback**: Update news container based on fetched news data
+# Update news container based on fetched news data
 @app.callback(Output("news-container", "children"), [Input("stored-news-data", "data")])
 def update_news(news_data):
     if not news_data:
         return html.Div("No news available for this stock.", className="text-muted")
 
-    # Limit to 5 news articles
     max_articles = min(5, len(news_data))
     news_items = []
 
@@ -350,8 +339,8 @@ def update_news(news_data):
                                 "borderRadius": "20px",
                                 "boxShadow": "0 2px 4px rgba(0,0,0,0.1)",
                                 "padding": "5px 15px",
-                                "transition": "all 0.2s ease"
-                            }
+                                "transition": "all 0.2s ease",
+                            },
                         ),
                     ]
                 ),
@@ -362,14 +351,13 @@ def update_news(news_data):
                     "borderRadius": "8px",
                     "boxShadow": "0 4px 8px rgba(0,0,0,0.1)",
                     "backgroundColor": "white",
-                    "transition": "all 0.3s ease"
-                }
+                    "transition": "all 0.3s ease",
+                },
             )
         )
 
     return news_items
 
 
-# Run app
 if __name__ == "__main__":
     app.run_server(debug=True)

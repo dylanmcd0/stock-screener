@@ -77,7 +77,8 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
-*.ipynb
+# Instead of ignoring all .ipynb files, we're keeping them in a notebooks/ folder
+notebooks/
 
 # IPython
 profile_default/
