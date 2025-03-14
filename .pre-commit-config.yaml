@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/psf/black
-    rev: 23.1.0  # Use the latest stable version
+    rev: 25.1.0  # Use the latest stable version
     hooks:
       - id: black
         args: ["--line-length=100"]  # Set max line length if needed
@@ -11,7 +11,7 @@ repos:
       - id: blacken-docs
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0  # General useful hooks
+    rev: v5.0.0  # General useful hooks
     hooks:
       - id: check-yaml
       - id: check-json
@@ -19,6 +19,6 @@ repos:
       - id: check-merge-conflict
 
   - repo: https://github.com/hadolint/hadolint
-    rev: v2.12.0  # Dockerfile linting
+    rev: v2.13.1-beta  # Dockerfile linting
     hooks:
       - id: hadolint

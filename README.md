@@ -7,7 +7,90 @@ This application provides basic tooling for analyzing stocks through price chart
 
 ![Stock Screener Screenshot](data/images/current_ui.png)
 
-I will be adding more features in the future.
+---
+## **Deployment Guide**
+
+### Deployment Options
+
+1. **Render** (Recommended for simplicity)
+   - Create an account on [Render](https://render.com/)
+   - Create a new Web Service
+   - Connect your GitHub repository
+   - Use the following settings:
+     - Build Command: `pip install -r requirements.txt`
+     - Start Command: `gunicorn app:server`
+   - Add environment variables: `NEWS_API_KEY`
+
+2. **Heroku**
+   - Create an account on [Heroku](https://heroku.com/)
+   - Install the Heroku CLI
+   - Run `heroku create`
+   - Push your code with `git push heroku main`
+   - Set environment variables with `heroku config:set NEWS_API_KEY=your_key`
+
+3. **AWS Elastic Beanstalk**
+   - Create an AWS account
+   - Install the EB CLI
+   - Initialize your application: `eb init`
+   - Create the environment: `eb create`
+   - Deploy: `eb deploy`
+
+4. **Docker**
+   - Build: `docker build -t stock-screener .`
+   - Run: `docker run -p 8050:8050 -e NEWS_API_KEY=your_key stock-screener`
+   - Deploy to any container service (AWS ECS, Google Cloud Run, etc.)
+
+### Files Already Prepared
+
+The project has been prepared for deployment with:
+1. A `Procfile` for Heroku
+2. A `Dockerfile` for container deployments
+3. `gunicorn` added to requirements.txt
+4. Server variable and port configuration in app.py
+
+### Updating Your Deployed App
+
+**Render**
+- Automatic updates: When connected to GitHub, Render automatically deploys new commits pushed to your selected branch
+- Manual updates: You can also trigger a manual deploy from the Render dashboard
+- To change the URL: Go to Settings → General → Name → Update the name (free tier: yourname.onrender.com)
+
+**Heroku**
+- Updates deploy automatically when you push to the connected GitHub branch
+- Or manually update with: `git push heroku main`
+- To view logs: `heroku logs --tail`
+
+**AWS Elastic Beanstalk**
+- Update with: `eb deploy`
+- View status: `eb status`
+- View logs: `eb logs`
+
+**Docker**
+- Rebuild image: `docker build -t stock-screener .`
+- Stop running container: `docker stop <container_id>`
+- Run updated container: `docker run -p 8050:8050 -e NEWS_API_KEY=your_key stock-screener`
+- For container services (ECS, GCP): Follow their specific update workflows
+
+---
+## **TODO / Roadmap**
+- [ ] Add technical indicators (Moving averages, MACD, RSI)
+- [ ] Implement custom date range selection
+- [ ] Add basic metrics (P/E ratio, market cap, etc.)
+- [ ] Compare metrics to S&P or sector average
+- [ ] Include options data for selected stock
+- [ ] Deploy app to webserver
+- [ ] Simple financial statement analysis 
+- [ ] Add dark mode toggle
+
+
+---
+## **Future Improvements**
+- Implement portfolio tracking functionality
+- Add financial statements visualization
+- Include options data for selected stocks
+- Basic financial modeling
+- Deployment (hopefully soon)
+
 
 ---
 ## **Features**
@@ -87,21 +170,6 @@ python -m app
 ```
 
 Navigate to http://127.0.0.1:8050/ in your web browser to use the application.
-
----
-## **Current Development**
-- Implementing caching to reduce API requests
-- Adding fundamental financial metrics
-- Improving the news integration with better filtering
-
----
-## **Future Improvements**
-- Implement portfolio tracking functionality
-- Add financial statements visualization
-- Include options data for selected stocks
-- Basic financial modeling
-- Deployment (hopefully soon)
-
 
 ---
 ## **Author**

@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 import datetime
 import plotly.graph_objects as go
 import pandas as pd
+import os
 from utils.fetch_data import fetch_stock_data, fetch_news  # Import stock data and news functions
 
 
@@ -28,6 +29,9 @@ app = dash.Dash(
     ],
     assets_folder="assets",
 )
+
+# Server object for gunicorn/deployment
+server = app.server
 
 app._favicon = "assets/favicon.ico"  # Add a favicon reference to ensure assets are loaded
 
@@ -260,7 +264,7 @@ def update_chart(stored_data, *args):
     )
 
     fig.update_layout(
-        title=f"{ticker.upper() if ticker else 'Stock'} Candlestick Chart",
+        title=f"${ticker.upper() if ticker else 'Stock'} Candlestick Chart",
         xaxis_title="Date",
         yaxis_title="Price",
         xaxis_rangeslider_visible=False,
@@ -360,4 +364,9 @@ def update_news(news_data):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    # Get port and debug mode from environment variables
+    port = int(os.environ.get("PORT", 8050))
+    debug = os.environ.get("DEBUG", "False").lower() == "true"
+
+    # Run the app
+    app.run_server(host="0.0.0.0", port=port, debug=debug)
